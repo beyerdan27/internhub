@@ -4,8 +4,57 @@
             NODE AND POSTGRESS
         </title>
     </head>
-    <body>
+   <!-- I KNOW HOW TO USE JQ AND NOT REACT SO THIS IS TEMPORARY I PROMISE --> <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
+    <body>
+<h1 id="asdf" style="font-family:'Open Sans', sans-serif;">Opportunity list:</h1>
+<ul id="qwer"></ul>
+<h1 style="font-family:'Open Sans', sans-serif;">Signed in as: Steve Jobs</h1>
+<p>Title</p>
+<textarea id="title"></textarea>
+<p>Description</p>
+<textarea id="desc"></textarea>
+<br>
+<button id="btn">Post opportunity</button>
     </body>
-    <script src="script.js"></script>
+   <!-- <script src="script.js"></script>-->
+<script>
+    //ITS ALL HERE FOR NOW SO I CAN USE JQUERY
+/*import pg from 'pg';
+const conn = "postgresql://db4@localhost:5432/postgres";
+const client = new pg.Client(conn);
+await client.connect();
+var query = await client.query("SELECT * FROM opportunities");
+console.log(query.rows);
+await client.end();
+*/
+//EXPRESS VERSION!11!1!
+function reload(){
+fetch("http://localhost:3000/api/opportunities").then(res => res.json()).then(data => {
+    var list = $("#qwer");
+    list.empty();
+    data.forEach(row => {
+        $("<li>").text(row.id + ": " + row.title + ", " + row.description).appendTo(list);
+    });
+});//i just learned today what => means this is cool
+}
+reload();
+$("#btn").click(function () {
+fetch("http://localhost:3000/api/opportunities",{
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({//stringify turns js vals unto json text
+    title: $("#title").val(),
+    description: $("#desc").val()
+    })}).then(result => {return result.json();}).then(reload());
+});
+
+
+
+
+
+</script>
+
+
+
 </html>
