@@ -4,7 +4,7 @@ import path from "path";
 import {fileURLToPath} from "url";
 const fileurl = fileURLToPath(import.meta.url);//somehow server.js crerates an api dir into which i fetch
 const dir = path.dirname(fileurl);
-const client = new pg.Client("postgresql://db4@localhost:5432/postgres");
+const client = new pg.Client("postgresql://interhub_user:Notpassword@localhost:5432/exp_learn");
 await client.connect();
 const exp = express();
 
@@ -30,3 +30,7 @@ exp.post("/api/opportunities", async function (req, res) {
     [req.body.title, req.body.description]
   );
 });
+
+//username: interhub_user
+//password: Notpassword
+//db: exp_learn
