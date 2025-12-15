@@ -72,6 +72,33 @@ exp.get("/api/users/:id", async (req, res) => {
   }
 });
 
+//UPDATE USER WITH NEW VALS
+exp.post("/update-user", async (req, res) => {
+  try {
+    const {email, password, fname, lname} = req.body; //email is the unique user identifier
+    if (!email) return res.status(400).json({ error: "email required to search" });
+    if (password === undefined && fname === undefined && lname === undefined) {
+      return res.status(400).json({ error: "no fields to update" });
+    }
+    const result = await client.query(
+      `UPDATE users
+         SET password = COALESCE($2, password),
+             first_name = COALESCE($3, first_name),
+             last_name  = COALESCE($4, last_name)
+       WHERE email = $1
+       RETURNING id, email, first_name, last_name, date_account_created`,
+      [email, password, fname, lname]
+    );
+    if (!result.rows.length) return res.status(404).json({ error: "user not found. try another email." });
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("Error updating user", err);
+    res.status(500).json({ error: "db error" });
+  }
+});
+
+
+
 
 
 
