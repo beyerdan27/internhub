@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Profile</title>
+</head>
+<body>
+  <h1>Edit Profile</h1>
+
+  <form id="editForm">
+    <label>Email: <input type="text" name="email" required></label><br><br>
+    <label>Password: <input type="text" name="password" required></label><br><br>
+    <label>First Name: <input type="text" name="first_name" required></label><br><br>
+    <label>Last Name: <input type="text" name="last_name" required></label><br><br>
+    <button id="Edit Proifle">Edit Profile</button>
+  </form>
+
+  <p id="message"></p>
+  <button onclick="location.href='index.html'">Back to Home</button>
+
+  <script>
+    document.getElementById("editForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      const res = await fetch("/update-user", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      document.getElementById("message").innerText =
+        res.ok ? "Profile updated!" : "Error updating profile";
+    };
+  </script>
+</body>
+</html>
